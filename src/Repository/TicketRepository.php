@@ -16,28 +16,18 @@ class TicketRepository extends ServiceEntityRepository
         parent::__construct($registry, Ticket::class);
     }
 
-    //    /**
-    //     * @return Ticket[] Returns an array of Ticket objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('t')
-    //            ->andWhere('t.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('t.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
-
-    //    public function findOneBySomeField($value): ?Ticket
-    //    {
-    //        return $this->createQueryBuilder('t')
-    //            ->andWhere('t.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    /**
+     * Get all tickets ordered by status, priority, and deadline.
+     *
+     * @return Ticket[]
+     */
+    public function getAll(): array
+    {
+        return $this->createQueryBuilder('t')
+            ->orderBy('t.status', 'ASC') // Ordenar por status, primero los de menor valor (status=1 aparecerá primero)
+            ->addOrderBy('t.priority', 'DESC') // Luego por prioridad descendente
+            ->addOrderBy('t.deadline', 'ASC') // Finalmente por fecha límite ascendente
+            ->getQuery()
+            ->getResult();
+    }
 }

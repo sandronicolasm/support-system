@@ -11,18 +11,21 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Messenger\MessageBusInterface;
+use App\Repository\TicketRepository;
 
 class TicketController extends AbstractController
 {
     public function __construct(
-        protected MessageBusInterface $messageBus)
+        protected MessageBusInterface $messageBus,
+        protected TicketRepository $ticketRepository
+    )
     {
     }
 
     #[Route('/admin/tickets', name: 'admin_tickets')]
     public function index(EntityManagerInterface $em)
     {
-        $tickets = $em->getRepository(Ticket::class)->findAll();
+        $tickets = $this->ticketRepository->getAll();
         $status = $em->getRepository(TicketStatus::class)->findAll();
 
         return $this->render('admin/tickets.html.twig', [
