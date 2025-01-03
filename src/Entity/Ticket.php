@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\TicketRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 
 #[ORM\Entity(repositoryClass: TicketRepository::class)]
@@ -17,9 +18,14 @@ class Ticket
     private ?int $id = null;
 
     #[ORM\Column(length: 100, nullable: false)]
+    #[Assert\NotBlank]
     private ?string $name = null;
 
     #[ORM\Column(length: 150, nullable: false)]
+    #[Assert\NotBlank]
+    #[Assert\Email(
+        message: 'The email {{ value }} is not a valid email.',
+    )]
     private ?string $email = null;
 
     #[ORM\ManyToOne(inversedBy: 'tickets')]
@@ -31,6 +37,7 @@ class Ticket
     private ?ProblemType $problem_type = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: false)]
+    #[Assert\NotBlank]
     private ?string $description = null;
 
     #[ORM\ManyToOne(inversedBy: 'tickets')]
