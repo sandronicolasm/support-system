@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestión de Tickets{% endblock %}
+
+{% block body %}
+
+<div class="container mt-4 container-admin-tickets">
+    <div id="tickets-list">
+        <!-- Aquí aparecerán los tickets en tiempo real -->
+    </div>
+    <h2 class="mb-4">Gestión de Tickets</h2>
+
+    <div class="row">
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Urgencia</th>
+                        <th>Tipo problema</th>
+                        <th>Descripción</th>
+                        <th>Creado</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ticket in tickets %}
+                        <tr>
+                            <td>{{ ticket.id }}</td>
+                            <td>{{ ticket.name }}</td>
+                            <td>{{ ticket.email }}</td>
+                            <td>{{ ticket.urgency }}</td>
+                            <td>{{ ticket.problemType }}</td>
+                            <td class="w-25">{{ ticket.description }}</td>
+                            <td>{{ ticket.createdAt|date('Y-m-d H:i:s') }}</td>
+                            <td>
+                                <select class="form-select form-select-sm" data-ticket-target="status" data-controller="ticket" data-action="change->ticket#changeStatus" data-id="{{ ticket.id }}">
+                                    {% for val in status %}
+                                        <option value="{{ val.id }}" {% if val.id == ticket.status.id %}selected{% endif %}>{{ val.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block importmap %}{{ importmap('app_admin') }}{% endblock %}
